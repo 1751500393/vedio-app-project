@@ -6,7 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="vedio-app-project" />
+        <module name="video-app-commons" />
+        <module name="video-app-admin" />
+        <module name="video-app-users" />
+        <module name="video-app-gateway" />
+        <module name="video-app-videos" />
+        <module name="video-app-cate" />
       </profile>
     </annotationProcessing>
   </component>
