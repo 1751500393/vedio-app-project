@@ -7,12 +7,22 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="video-app-commons" />
-        <module name="video-app-admin" />
         <module name="video-app-users" />
+        <module name="video-app-admins" />
         <module name="video-app-gateway" />
         <module name="video-app-videos" />
         <module name="video-app-cate" />
       </profile>
     </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="video-app-admins" options="-parameters" />
+      <module name="video-app-cate" options="-parameters" />
+      <module name="video-app-commons" options="-parameters" />
+      <module name="video-app-gateway" options="-parameters" />
+      <module name="video-app-users" options="-parameters" />
+      <module name="video-app-videos" options="-parameters" />
+    </option>
   </component>
 </project>
