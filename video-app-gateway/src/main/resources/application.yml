@@ -1,0 +1,42 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 121.196.203.51:8848
+    gateway:
+#      路由
+      routes:
+        - id: admin_router
+          uri: http://localhost:8980
+          predicates:
+            - Path=/admin/demos/**
+          filters:
+            - StripPrefix=1
+        - id: cate_router
+          uri: http://localhost:8981
+          predicates:
+            - Path=/cate/demos/**
+          filters:
+            - StripPrefix=1
+        - id: users_router
+          uri: http://localhost:8982
+          predicates:
+            - Path=/users/demos/**
+          filters:
+            - StripPrefix=1
+        - id: videos_router
+          uri: http://localhost:8983
+          predicates:
+            - Path=/videos/demos/**
+          filters:
+             - StripPrefix=1
+#          跨域处理
+      cors-configurations:
+          '[/**]':
+          allowedOrigins: "*"
+          allowedMethods: "*"
+          allowedHeaders: "*"

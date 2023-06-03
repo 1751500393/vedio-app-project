@@ -1,6 +1,9 @@
 version: "3.3"
 networks:
-  vedio-app:
+  vedio_app:
+volumes:
+  data:
+  redisdata:
 services:
   nacos:
     image: nacos/nacos-server:2.0.2
@@ -11,4 +14,23 @@ services:
       - "JVM_XMX=256m"
       - "MODE=standalone"
     networks:
-      - vedio-app
+      - vedio_app
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - vedio_app
+    volumes:
+      - data:/var/lib/mysql
+      - ./video_project.sql:/docker-entrypoint-initdb.d/video_project.sql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_DATABASE=video_project"
+  redis:
+    image: redis:5.0.10
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
