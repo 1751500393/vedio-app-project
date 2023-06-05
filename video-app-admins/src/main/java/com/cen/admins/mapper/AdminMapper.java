@@ -1,6 +1,7 @@
 package com.cen.admins.mapper;
 
 import com.cen.admins.entity.Admin;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author makejava
  * @since 2023-06-02 20:24:07
  */
+@Mapper
 public interface AdminMapper {
 
     /**

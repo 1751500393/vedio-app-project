@@ -1,16 +1,21 @@
 package com.cen.admins.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.cen.admins.entity.Admin;
 import com.cen.admins.mapper.AdminMapper;
 import com.cen.admins.service.AdminService;
+import com.cen.admins.utils.global.handler.utils.exception.ServiceRuntimeException;
+import com.cen.admins.utils.global.handler.utils.json.JsonPackageMsgAndCode;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 
 /**
  * (Admin)表服务实现类
@@ -18,7 +23,7 @@ import javax.annotation.Resource;
  * @author makejava
  * @since 2023-06-02 20:24:16
  */
-@Service("adminService")
+@Service
 @Transactional
 public class AdminServiceImpl implements AdminService {
     @Resource
@@ -38,8 +43,8 @@ public class AdminServiceImpl implements AdminService {
     /**
      * 分页查询
      *
-     * @param admin 筛选条件
-     * @param pageRequest      分页对象
+     * @param admin       筛选条件
+     * @param pageRequest 分页对象
      * @return 查询结果
      */
     @Override
@@ -82,6 +87,7 @@ public class AdminServiceImpl implements AdminService {
     public boolean deleteById(Integer id) {
         return this.adminMapper.deleteById(id) > 0;
     }
+
     /**
      * 通过admin对象,登录
      *
@@ -90,8 +96,13 @@ public class AdminServiceImpl implements AdminService {
      */
     @Override
     public Admin login(Admin admin) {
-        Admin adminDB=adminMapper.findByUserName(admin.getUsername());
-//        if (ObjectUtils.isEmpty(adminDB))
-        return null;
+        Admin adminDB = adminMapper.findByUserName(admin.getUsername());
+//         判断用户名是否存在
+        if (ObjectUtils.isEmpty(adminDB)) throw new ServiceRuntimeException(JsonPackageMsgAndCode.USERNAME_IS_WRONG);
+
+//        判断密码
+        String password=DigestUtils.md5DigestAsHex(admin.getPassword().getBytes(StandardCharsets.UTF_8));
+        if (!StringUtils.equals(password,adminDB.getPassword())) throw new ServiceRuntimeException(JsonPackageMsgAndCode.PASSWORD_IS_WRONG);
+        return adminDB;
     }
 }

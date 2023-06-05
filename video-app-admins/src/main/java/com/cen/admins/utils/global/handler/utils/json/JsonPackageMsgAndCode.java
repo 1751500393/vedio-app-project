@@ -7,7 +7,9 @@ public enum JsonPackageMsgAndCode {
     /**
      * 成功运行
      */
-    SUCCESS("200","success");
+    SUCCESS("200", "success"),
+
+    USERNAME_IS_WRONG("5001", "用户名错误"), PASSWORD_IS_WRONG("5002", "密码错误");
 
     final String code;
     final String msg;

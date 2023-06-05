@@ -13,7 +13,7 @@ spring:
         - id: admin_router
           uri: http://localhost:8980
           predicates:
-            - Path=/admin/demos/**
+            - Path=/admin/demos/**,/admin/tokens/**,/admin/admin-user/**
           filters:
             - StripPrefix=1
         - id: cate_router

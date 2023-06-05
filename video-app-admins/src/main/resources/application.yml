@@ -13,8 +13,12 @@ spring:
     url: jdbc:mysql://121.196.203.51:3306/video_project?characterEncoding=UTF-8&useSSL=false
     username: root
     password: root
+  redis:
+    host: 121.196.203.51
+    port: 6379
+
 mybatis:
-  mapper-locations:
+  mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.cen.admins.entity
 logging:
   level:
