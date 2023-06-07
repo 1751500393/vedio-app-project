@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cen.cate.dao.CategoryDao">
+    <resultMap type="com.cen.cate.entity.Category" id="CategoryMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap type="com.cen.cate.entity.Category" id="CategoryMap1">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <collection property="categoryList" ofType="com.cen.cate.entity.Category" javaType="list">
+            <id property="id" column="c1_id" jdbcType="INTEGER"/>
+            <result property="name" column="c1_name" jdbcType="VARCHAR"/>
+            <result property="parentId" column="c1_parent_id"  jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+    <select id="selectByFirstLevel" resultMap="CategoryMap1">
+        select
+          c.id,
+          c.name,
+          c1.id c1_id,
+          c1.name c1_name,
+          c1.parent_id c1_parent_id
+        from category c
+        left join category c1
+        on c.id=c1.parent_id
+        where c.parent_id is null
+    </select>
+    <!--查询单个-->
+    <select id="queryById" resultMap="CategoryMap">
+
+
+
+        select
+          id, name, parent_id, created_at, updated_at, deleted_at
+        from category
+        where id = #{id}
+
+
+
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CategoryMap">
+
+
+
+        select
+          id, name, parent_id, created_at, updated_at, deleted_at
+        from category
+
+
+
+        <where>
+            <if test="cate.id != null">
+                and id = #{cate.id}
+
+
+
+            </if>
+            <if test="cate.name != null and cate.name != ''">
+
+
+
+                and name = #{cate.name}
+
+
+
+            </if>
+            <if test="cate.parentId != null">
+
+
+
+                and parent_id = #{cate.parentId}
+
+
+
+            </if>
+            <if test="cate.createdAt != null">
+
+
+
+                and created_at = #{cate.createdAt}
+
+
+
+            </if>
+            <if test="cate.updatedAt != null">
+
+
+
+                and updated_at = #{cate.updatedAt}
+
+
+
+            </if>
+            <if test="cate.deletedAt != null">
+
+
+
+                and deleted_at = #{cate.deletedAt}
+            </if>
+        </where>
+
+
+
+        limit #{pageable.offset}, #{pageable.pageSize}
+
+
+
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+
+
+
+        select count(1)
+        from category
+
+
+
+        <where>
+            <if test="id != null">
+                and id = #{id}
+
+
+
+            </if>
+            <if test="name != null and name != ''">
+
+
+
+                and name = #{name}
+
+
+
+            </if>
+            <if test="parentId != null">
+
+
+
+                and parent_id = #{parentId}
+
+
+
+            </if>
+            <if test="createdAt != null">
+
+
+
+                and created_at = #{createdAt}
+
+
+
+            </if>
+            <if test="updatedAt != null">
+
+
+
+                and updated_at = #{updatedAt}
+
+
+
+            </if>
+            <if test="deletedAt != null">
+
+
+
+                and deleted_at = #{deletedAt}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列
+        useGeneratedKeys 针对mysql数据库可用,使用数据库自动递增的id
+        keyProperty 讲数据库本次生成id 赋值给参数对象的哪个属性
+    -->
+    <insert id="insert" parameterType="com.cen.cate.entity.Category" keyProperty="id" useGeneratedKeys="true">
+
+
+
+        insert into category(name, parent_id, created_at, updated_at, deleted_at)
+        values (#{name}, #{parentId}, #{createdAt}, #{updatedAt}, #{deletedAt})
+
+
+
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+
+
+
+        insert into category(name, parent_id, created_at, updated_at, deleted_at)
+        values
+
+
+
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.parentId}, #{entity.createdAt}, #{entity.updatedAt}, #{entity.deletedAt})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+
+
+
+        insert into category(name, parent_id, created_at, updated_at, deleted_at)
+        values
+
+
+
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.parentId}, #{entity.createdAt}, #{entity.updatedAt}, #{entity.deletedAt})
+        </foreach>
+
+
+
+        on duplicate key update
+        name = values(name),
+        parent_id = values(parent_id),
+        created_at = values(created_at),
+        updated_at = values(updated_at),
+        deleted_at = values(deleted_at)
+
+
+
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+
+
+
+        update category
+
+
+
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+
+
+
+            </if>
+            <if test="parentId != null">
+
+
+
+                parent_id = #{parentId},
+
+
+
+            </if>
+            <if test="createdAt != null">
+
+
+
+                created_at = #{createdAt},
+
+
+
+            </if>
+            <if test="updatedAt != null">
+
+
+
+                updated_at = #{updatedAt},
+
+
+
+            </if>
+            <if test="deletedAt != null">
+
+
+
+                deleted_at = #{deletedAt},
+            </if>
+        </set>
+
+
+
+        where id = #{id}
+
+
+
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+
+
+
+        delete from category where id = #{id}
+
+
+
+    </delete>
+
+</mapper>
+

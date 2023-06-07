@@ -13,13 +13,13 @@ spring:
         - id: admin_router
           uri: http://localhost:8980
           predicates:
-            - Path=/admin/demos/**,/admin/tokens/**,/admin/admin-user/**
+            - Path=/admin/demos/**,/admin/tokens/**,/admin/admin-user/**,/admin/tokens/logout/**
           filters:
             - StripPrefix=1
         - id: cate_router
           uri: http://localhost:8981
           predicates:
-            - Path=/cate/demos/**
+            - Path=/cate/demos/**,/cate/categories/**
           filters:
             - StripPrefix=1
         - id: users_router

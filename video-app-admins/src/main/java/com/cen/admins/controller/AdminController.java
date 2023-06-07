@@ -1,18 +1,20 @@
 package com.cen.admins.controller;
 
 import com.cen.admins.entity.Admin;
+import com.cen.admins.objects.dtos.AdminDTO;
 import com.cen.admins.service.AdminService;
-import com.cen.admins.utils.JSONUtils;
+import com.cen.commans.utils.JSONUtils;
+import com.cen.admins.utils.global.handler.utils.exception.ControllerRuntimeException;
 import com.cen.admins.utils.global.handler.utils.json.JsonPackageMsgAndCode;
 import com.cen.admins.utils.global.handler.utils.json.JsonResult;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,11 +66,27 @@ public class AdminController extends BaseController {
      * 获取登录用户的信息
      */
     @GetMapping("/admin-user")
-    public Admin admin(@RequestParam String token) {
+    public JsonResult<AdminDTO> admin(@RequestParam String token) {
         log.info("当前用户信息:{}", token);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        return (Admin) redisTemplate.opsForValue().get(token);
+        Admin admin = (Admin) redisTemplate.opsForValue().get(token);
+        AdminDTO adminDTO = new AdminDTO();
+        BeanUtils.copyProperties(admin, adminDTO);
+        return new JsonResult<AdminDTO>(JsonPackageMsgAndCode.SUCCESS, adminDTO);
     }
 
+    /**
+     * 登出接口
+     */
+    @DeleteMapping("/tokens/logout/{token}")
+    public JsonResult<Void> logout(@PathVariable("token") String token) {
+//        设置序列化器(方便String的序列化和反序列化)
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        Boolean f = redisTemplate.delete(token);
+        if (f) {
+            return new JsonResult<Void>(JsonPackageMsgAndCode.SUCCESS, null);
+        }
+        throw new ControllerRuntimeException(JsonPackageMsgAndCode.FAIL_LOGOUT);
+    }
 }
 

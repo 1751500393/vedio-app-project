@@ -1,9 +1,11 @@
 package com.cen.admins.utils.global.handler.utils.json;
 
 import com.cen.admins.utils.global.handler.utils.exception.BaseException;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JsonResult<T> {
     /**
      * 异常信息
