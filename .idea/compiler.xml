@@ -9,16 +9,23 @@
         <outputRelativeToContentRoot value="true" />
         <module name="video-app-commons" />
         <module name="video-app-users" />
+        <module name="video-app-api" />
         <module name="video-app-admins" />
         <module name="video-app-gateway" />
         <module name="video-app-videos" />
         <module name="video-app-cate" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="vedio-app-api" target="11" />
+      <module name="video-app-api" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="vedio-app-api" options="-parameters" />
       <module name="video-app-admins" options="-parameters" />
+      <module name="video-app-api" options="-parameters" />
       <module name="video-app-cate" options="-parameters" />
       <module name="video-app-commons" options="-parameters" />
       <module name="video-app-gateway" options="-parameters" />

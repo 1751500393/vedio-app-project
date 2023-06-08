@@ -2,7 +2,7 @@ package com.cen.cate.controller;
 
 import com.cen.cate.entity.Category;
 import com.cen.cate.service.CategoryService;
-import com.cen.commans.utils.JSONUtils;
+//import com.cen.commans.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +35,14 @@ public class CategoryController {
     @PatchMapping("/{id}")
     public Category update(@PathVariable("id") Integer id, @RequestBody Category category) {
         log.info("更新类别的id:{}",id);
-        log.info("更新类别信息:{}", JSONUtils.writeJSON(category));
+//        log.info("更新类别信息:{}", JSONUtils.writeJSON(category));
         category.setId(id);
        return categoryService.update(category);
     }
 //    添加类别接口
     @PostMapping
     public Category save(@RequestBody Category category){
-        log.info("添加类别信息:{}",JSONUtils.writeJSON(category));
+//        log.info("添加类别信息:{}",JSONUtils.writeJSON(category));
          Category categoryDB=categoryService.insert(category);
         return  categoryDB;
     }
